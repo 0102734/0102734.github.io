@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+ <html lang="en">
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>TOAST UI Chart Example</title>
+     <link rel="stylesheet" href="https://uicdn.toast.com/chart/latest/toastui-chart.min.css">
+     <script src="https://uicdn.toast.com/chart/latest/toastui-chart.min.js"></script>
+ </head>
+ <body>
+     <div id="chart-area"></div>
+
+     <script type="text/javascript">
+         document.addEventListener('DOMContentLoaded', function () {
+             const el = document.getElementById('chart-area');
+
+             // Fetch the JSON data from the URL
+             fetch('https://www.sappt.co.kr/assets/json/monthlyTemperatures.json')
+                 .then(response => response.json())
+                 .then(data => {
+                     // Transform the fetched data into a format suitable for the chart
+                     const transformedData = transformDataForChart(data);
+
+                     // Define chart options
+                     const options = {
+                         chart: {
+                             title: 'Monthly Average Temperature',
+                             width: 900,
+                             height: 500
+                         },
+                         xAxis: {
+                             title: 'Month'
+                         },
+                         yAxis: {
+                             title: 'Temperature (°C)'
+                         },
+                         legend: {
+                             visible: true
+                         },
+                         series: {
+                             showDot: true,
+                             spline: true
+                         }
+                     };
+
+                     // Create the line chart
+                     toastui.Chart.lineChart({ el, data: transformedData, options });
+                 })
+                 .catch(error => console.error('Error loading the JSON data:', error));
+
+             // Function to transform the fetched JSON data into chart data format
+             function transformDataForChart(jsonData) {
+                 const categories = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                 const series = [
+                     { name: 'Seoul', data: [] },
+                     { name: 'Daegu', data: [] },
+                     { name: 'Busan', data: [] }
+                 ];
+
+                 jsonData.forEach(item => {
+                     const citySeries = series.find(s => s.name === item.region);
+                     if (citySeries) {
+                         citySeries.data.push(item.temperature);
+                     }
+                 });
+
+                 return { categories, series };
+             }
+         });
+     </script>
+ </body>
+ </html>
