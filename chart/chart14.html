@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monthly Temperatures</title>
+    <!-- Include amCharts libraries -->
+    <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+</head>
+<body>
+    <div id="chartdiv" style="width: 100%; height: 500px;"></div>
+
+    <script>
+        am5.ready(function() {
+            // Create root element
+            var root = am5.Root.new("chartdiv");
+
+            // Set themes
+            root.setThemes([
+                am5themes_Animated.new(root)
+            ]);
+
+            // Create chart
+            var chart = root.container.children.push(am5xy.XYChart.new(root, {
+                panX: true,
+                panY: true,
+                wheelX: "panX",
+                wheelY: "zoomX",
+                pinchZoomX: true
+            }));
+
+            // Add cursor
+            var cursor = chart.set("cursor", am5xy.XYCursor.new(root, {}));
+            cursor.lineY.set("visible", false);
+
+            // Create axes
+            var xAxis = chart.xAxes.push(am5xy.CategoryAxis.new(root, {
+                categoryField: "month",
+                renderer: am5xy.AxisRendererX.new(root, {
+                    minGridDistance: 30
+                })
+            }));
+
+            var yAxis = chart.yAxes.push(am5xy.ValueAxis.new(root, {
+                renderer: am5xy.AxisRendererY.new(root, {})
+            }));
+
+            // Create series
+            function createSeries(name, fieldName) {
+                var series = chart.series.push(am5xy.SmoothedXLineSeries.new(root, {
+                    name: name,
+                    xAxis: xAxis,
+                    yAxis: yAxis,
+                    valueYField: fieldName,
+                    categoryXField: "month",
+                    tensionX: 0.8 // Smoothness of the lines
+                }));
+
+                series.bullets.push(function() {
+                    return am5.Bullet.new(root, {
+                        sprite: am5.Circle.new(root, {
+                            radius: 5,
+                            fill: series.get("fill")
+                        })
+                    });
+                });
+
+                series.set("tooltip", am5.Tooltip.new(root, {
+                    labelText: "[bold]{name}[/]\n{categoryX}: {valueY}"
+                }));
+            }
+
+            // Set data
+            var data = [
+                { "month": "Jan", "Seoul": -2, "Daegu": 0, "Busan": 9, "Incheon": 11 },
+                { "month": "Feb", "Seoul": 1, "Daegu": 3, "Busan": 6, "Incheon": 16 },
+                { "month": "Mar", "Seoul": 6, "Daegu": 8, "Busan": 10, "Incheon": 20 },
+                { "month": "Apr", "Seoul": 12, "Daegu": 14, "Busan": 15, "Incheon": 25 },
+                { "month": "May", "Seoul": 18, "Daegu": 20, "Busan": 19, "Incheon": 19 },
+                { "month": "Jun", "Seoul": 22, "Daegu": 24, "Busan": 22, "Incheon": 22 },
+                { "month": "Jul", "Seoul": 25, "Daegu": 15, "Busan": 26, "Incheon": 28 },
+                { "month": "Aug", "Seoul": 11, "Daegu": 29, "Busan": 15, "Incheon": 10 },
+                { "month": "Sep", "Seoul": 20, "Daegu": 22, "Busan": 23, "Incheon": 33 },
+                { "month": "Oct", "Seoul": 14, "Daegu": 16, "Busan": 18, "Incheon": 34 },
+                { "month": "Nov", "Seoul": 7, "Daegu": 9, "Busan": 12, "Incheon": 35 },
+                { "month": "Dec", "Seoul": 0, "Daegu": 2, "Busan": 6, "Incheon": 33 }
+            ];
+
+            xAxis.data.setAll(data);
+
+            createSeries("Seoul", "Seoul");
+            createSeries("Daegu", "Daegu");
+            createSeries("Busan", "Busan");
+            createSeries("Incheon", "Incheon");
+
+            // Add data
+            chart.series.each(function(series) {
+                series.data.setAll(data);
+            });
+
+            // Make chart animate on load
+            chart.appear(1000, 100);
+        });
+    </script>
+</body>
+</html>
