@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ext JS 6.2 Grid Example</title>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/extjs/6.2.0/classic/theme-triton/resources/theme-triton-all.css">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/extjs/6.2.0/ext-all.js"></script>
+    <style>
+        /* HTML, BODY 요소의 높이를 100%로 설정 */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        /* 그리드 패널의 높이를 100%로 지정 */
+        .my-grid {
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <script type="text/javascript">
+        Ext.application({
+            name: 'MyApp',
+            launch: function () {
+                var store = Ext.create('Ext.data.Store', {
+                    fields:['albumId', 'id', 'title', 'url', 'thumbnailUrl'],
+                    proxy: {
+                        type: 'ajax',
+                        url: 'https://jsonplaceholder.typicode.com/photos',
+                        reader: {
+                            type: 'json',
+                            rootProperty: ''
+                        }
+                    }
+                });
+
+                var progressBar = Ext.create('Ext.ProgressBar', {
+                    width: '100%',
+                    hidden: true
+                });
+
+                var grid = Ext.create('Ext.grid.Panel', {
+                    title: 'Photos',
+                    cls: 'my-grid', // CSS 클래스 추가
+                    store: store,
+                    columns: [
+                        { text: 'Album ID',  dataIndex: 'albumId', width: 100 },
+                        { text: 'ID', dataIndex: 'id', width: 100 },
+                        { text: 'Title', dataIndex: 'title', flex: 1 },
+                        {
+                            text: 'Thumbnail',
+                            dataIndex: 'thumbnailUrl',
+                            width: 150,
+                            xtype: 'widgetcolumn',
+                            widget: {
+                                xtype: 'image',
+                                width: 100,
+                                height: 100,
+                                bind: {
+                                    src: '{record.thumbnailUrl}'
+                                }
+                            }
+                        }
+                    ],
+                    renderTo: Ext.getBody(),
+                    tbar: [
+                        progressBar, // 프로그래스 바 추가
+                        { // 조회 버튼 추가
+                            text: '조회',
+                            handler: function() {
+                                progressBar.show(); // 프로그래스 바 표시
+                                store.load({
+                                    callback: function() {
+                                        progressBar.hide(); // 데이터 로드 완료 후 프로그래스 바 숨김
+                                    }
+                                });
+                            }
+                        }
+                    ]
+                });
+            }
+        });
+    </script>
+</body>
+</html>

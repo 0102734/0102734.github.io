@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ext JS 6.2 Example</title>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/extjs/6.2.0/classic/theme-triton/resources/theme-triton-all.css">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/extjs/6.2.0/ext-all.js"></script>
+</head>
+<body>
+    <script type="text/javascript">
+        Ext.application({
+            name: 'MyApp',
+            launch: function () {
+                Ext.create('Ext.panel.Panel', {
+                    title: 'Ext JS 6.2 Example',
+                    width: 300,
+                    height: 200,
+                    renderTo: Ext.getBody(),
+                    items: [{
+                        xtype: 'button',
+                        text: 'Click Me',
+                        handler: function () {
+                            Ext.Msg.alert('Button Clicked', 'You clicked the button!');
+                        }
+                    }]
+                });
+            }
+        });
+    </script>
+</body>
+</html>
+
+ChatGPT

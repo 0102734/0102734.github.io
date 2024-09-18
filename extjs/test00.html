@@ -1,1 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ext JS 6.2 Tab Panel Example</title>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/extjs/6.2.0/classic/theme-triton/resources/theme-triton-all.css">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/extjs/6.2.0/ext-all.js"></script>
+    <style>
+        /* body와 html 요소의 높이를 100%로 설정 */
+        body, html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
 
+        /* Tab Panel의 너비와 높이를 100%로 설정 */
+        .x-panel-body-default, .x-panel-body-default-ct {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <script type="text/javascript">
+        Ext.application({
+            name: 'MyApp',
+            launch: function () {
+                // Tab Panel 생성 함수
+                function createTabPanel() {
+                    Ext.create('Ext.tab.Panel', {
+                        renderTo: Ext.getBody(),
+                        width: '100%', // Tab Panel의 폭을 100%로 설정
+                        height: '100%', // Tab Panel의 높이를 100%로 설정
+                        items: [{
+                            title: 'test0a',
+                            loader: {
+                                url: 'tab1.html',
+                                autoLoad: true
+                            }
+                        }, {
+                            title: 'Tab 2',
+                            loader: {
+                                url: 'tab2.html',
+                                autoLoad: true
+                            }
+                        }]
+                    });
+                }
+
+                // 초기 Tab Panel 생성
+                createTabPanel();
+
+                // 브라우저 크기 변경 이벤트 처리
+                Ext.EventManager.onWindowResize(function () {
+                    // 기존 Tab Panel 제거
+                    Ext.getBody().down('div.x-panel').remove();
+
+                    // 새로운 Tab Panel 생성
+                    createTabPanel();
+                });
+            }
+        });
+    </script>
+</body>
+</html>

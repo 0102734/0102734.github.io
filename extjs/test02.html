@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ext JS 6.2 Grid Example</title>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/extjs/6.2.0/classic/theme-triton/resources/theme-triton-all.css">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/extjs/6.2.0/ext-all.js"></script>
+</head>
+<body>
+    <script type="text/javascript">
+        Ext.application({
+            name: 'MyApp',
+            launch: function () {
+                Ext.create('Ext.data.Store', {
+                    storeId:'sampleStore',
+                    fields:['name', 'email', 'phone'],
+                    data:{'items':[
+                        { 'name': 'Lisa',  "email":"lisa@simpsons.com",  "phone":"555-111-1224"  },
+                        { 'name': 'Bart',  "email":"bart@simpsons.com",  "phone":"555-222-1234" },
+                        { 'name': 'Homer', "email":"homer@simpsons.com",  "phone":"555-222-1244"  },
+                        { 'name': 'Marge', "email":"marge@simpsons.com", "phone":"555-222-1254"  }
+                    ]},
+                    proxy: {
+                        type: 'memory',
+                        reader: {
+                            type: 'json',
+                            rootProperty: 'items'
+                        }
+                    }
+                });
+
+                Ext.create('Ext.grid.Panel', {
+                    title: 'Ext JS 6.2 Grid Example',
+                    store: Ext.data.StoreManager.lookup('sampleStore'),
+                    columns: [
+                        { text: 'Name',  dataIndex: 'name' },
+                        { text: 'Email', dataIndex: 'email', flex: 1 },
+                        { text: 'Phone', dataIndex: 'phone' }
+                    ],
+                    height: 200,
+                    width: 400,
+                    renderTo: Ext.getBody(),
+                    listeners: {
+                        itemclick: function(grid, record) {
+                            Ext.Msg.alert('Selected', 'You selected ' + record.get('name'));
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

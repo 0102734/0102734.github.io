@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ext JS 6.2 Grid Example with Paging (PagingToolbar at bottom)</title>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/extjs/6.2.0/classic/theme-triton/resources/theme-triton-all.css">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/extjs/6.2.0/ext-all.js"></script>
+    <style>
+        /* HTML, BODY 요소의 높이를 100%로 설정 */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        /* 그리드 패널의 높이를 100%로 지정 */
+        .my-grid {
+            height: 100%;
+        }
+        /* 로딩 마스크 스타일 */
+        .loading-mask {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10000; /* 다른 요소 위에 표시하기 위해 큰 값 지정 */
+        }
+        .loading-mask .loading-spinner {
+            border: 16px solid #f3f3f3;
+            border-top: 16px solid #3498db;
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            animation: spin 2s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-mask" id="loadingMask" style="display: none;">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <script type="text/javascript">
+        Ext.application({
+            name: 'MyApp',
+            launch: function () {
+                // Store 생성
+                var store = Ext.create('Ext.data.Store', {
+                    fields:['userId', 'id', 'title', 'body'],
+                    pageSize: 10, // 페이지당 아이템 수
+                    proxy: {
+                        type: 'ajax',
+                        url: 'https://jsonplaceholder.typicode.com/posts',
+                        reader: {
+                            type: 'json',
+                            rootProperty: 'data'
+                        }
+                    }
+                });
+
+                // 그리드 패널 생성
+                var grid = Ext.create('Ext.grid.Panel', {
+                    title: 'Posts',
+                    cls: 'my-grid', // CSS 클래스 추가
+                    store: store,
+                    columns: [
+                        { text: 'User ID',  dataIndex: 'userId' },
+                        { text: 'ID', dataIndex: 'id' },
+                        { text: 'Title', dataIndex: 'title', flex: 1 },
+                        { text: 'Body', dataIndex: 'body', flex: 1 }
+                    ],
+                    renderTo: Ext.getBody(),
+                    autoScroll: true, // 그리드 내부에 스크롤 적용
+ 
+                    tbar: [{ // 조회 버튼 추가
+                        text: '조회',
+                        handler: function() {
+                            var loadingMask = Ext.get('loadingMask');
+                            loadingMask.setStyle('display', 'flex'); // 로딩 마스크 표시
+
+                            store.load({
+                                callback: function() {
+                                    loadingMask.setStyle('display', 'none'); // 로딩 마스크 숨김
+                                }
+                            });
+                        }
+                    }]
+                });
+
+                // 스토어 로드
+                store.loadPage(1); // 페이지 1 로드
+            }
+        });
+    </script>
+</body>
+</html>

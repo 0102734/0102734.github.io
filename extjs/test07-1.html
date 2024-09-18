@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ext JS 6.2 Grid Example</title>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/extjs/6.2.0/classic/theme-triton/resources/theme-triton-all.css">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/extjs/6.2.0/ext-all.js"></script>
+    <style>
+        /* HTML, BODY 요소의 높이를 100%로 설정 */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        /* 그리드 패널의 높이를 100%로 지정 */
+        .my-grid {
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <script type="text/javascript">
+        Ext.application({
+            name: 'MyApp',
+            launch: function () {
+                var store = Ext.create('Ext.data.Store', {
+                    fields:['userId', 'id', 'title', 'body'],
+                    proxy: {
+                        type: 'ajax',
+                        url: 'https://jsonplaceholder.typicode.com/posts',
+                        reader: {
+                            type: 'json',
+                            rootProperty: 'data'
+                        }
+                    }
+                });
+
+                var grid = Ext.create('Ext.grid.Panel', {
+                    title: 'Posts',
+                    cls: 'my-grid', // CSS 클래스 추가
+                    store: store,
+                    columns: [
+                        { text: 'User ID',  dataIndex: 'userId' },
+                        { text: 'ID', dataIndex: 'id' },
+                        { text: 'Title', dataIndex: 'title', flex: 1 },
+                        { text: 'Body', dataIndex: 'body', flex: 1 }
+                    ],
+                    renderTo: Ext.getBody(),
+                    tbar: [{ // 조회 버튼 추가
+                        text: '조회',
+                        handler: function() {
+                            // Masking
+                            grid.setMasked({
+                                xtype: 'loadmask',
+                                message: 'loading.......'
+                            });
+                            store.load({
+                                callback: function() {
+                                    // Unmasking after data is loaded
+                                    grid.setMasked(false);
+                                }
+                            });
+                        }
+                    }]
+                });
+            }
+        });
+    </script>
+</body>
+</html>

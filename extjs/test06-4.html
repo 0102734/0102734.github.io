@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ext JS 6.2 Grid Example with Paging (PagingToolbar at bottom)</title>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/extjs/6.2.0/classic/theme-triton/resources/theme-triton-all.css">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/extjs/6.2.0/ext-all.js"></script>
+    <style>
+        /* HTML, BODY 요소의 높이를 100%로 설정 */
+        html, body {
+            height: 95%;
+            margin: 10;
+            padding: 20;
+        }
+        /* 그리드 패널의 높이를 100%로 지정 */
+        .my-grid {
+            height: 90%;
+        }
+    </style>
+</head>
+<body>
+    <script type="text/javascript">
+        Ext.application({
+            name: 'MyApp',
+            launch: function () {
+                // Store 생성
+                var store = Ext.create('Ext.data.Store', {
+                    storeId:'sampleStore',
+                    fields:['userId', 'id', 'title', 'body'],
+                    autoLoad: true,
+                    pageSize: 10, // 페이지당 아이템 수
+                    proxy: {
+                        type: 'ajax',
+                        url: 'https://jsonplaceholder.typicode.com/posts',
+                        reader: {
+                            type: 'json',
+                            rootProperty: 'data'
+                        }
+                    }
+                });
+
+                // 그리드 패널 생성
+                var grid = Ext.create('Ext.grid.Panel', {
+                    title: 'Posts',
+                    cls: 'my-grid', // CSS 클래스 추가
+                    store: store,
+                    columns: [
+                        { text: 'User ID',  dataIndex: 'userId' },
+                        { text: 'ID', dataIndex: 'id' },
+                        { text: 'Title', dataIndex: 'title', flex: 1 },
+                        { text: 'Body', dataIndex: 'body', flex: 1 }
+                    ],
+                    dockedItems: [{
+                        xtype: 'toolbar',
+                        dock: 'top',
+                        items: [{
+                            xtype: 'textfield',
+                            emptyText: '검색어 입력',
+                            id: 'searchField'
+                        }, {
+                            xtype: 'button',
+                            text: '조회',
+                            handler: function() {
+                                var searchText = Ext.getCmp('searchField').getValue();
+                                if (searchText) {
+                                    store.clearFilter(true);
+                                    store.filterBy(function(record) {
+                                        var regex = new RegExp(searchText, 'i');
+                                        return regex.test(record.get('title')) || regex.test(record.get('body'));
+                                    });
+                                } else {
+                                    store.clearFilter();
+                                }
+                            }
+                        }]
+                    }]
+                });
+
+                // PagingToolbar 생성
+                var pagingToolbar = Ext.create('Ext.PagingToolbar', {
+                    store: store,
+                    dock: 'bottom', // 페이징바를 하단에 표시
+                    displayInfo: true,
+                    displayMsg: 'Displaying posts {0} - {1} of {2}',
+                    emptyMsg: "No posts to display"
+                });
+
+                // Viewport 생성하여 그리드와 PagingToolbar를 포함
+                Ext.create('Ext.container.Viewport', {
+                    layout: 'fit',
+                    items: [ 
+                        grid,
+                        pagingToolbar
+                    ]
+                });
+            }
+        });
+    </script>
+</body>
+</html>
