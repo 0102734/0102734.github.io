@@ -20,29 +20,59 @@
             font-size: 16px;
             border-radius: 5px;
         }
+        .buttons {
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 14px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
     </style>
 </head>
 <body>
     <h1>Gridstack.js Sample</h1>
-    <div class="grid-stack">
-        <!-- 기본 위젯 -->
-        <div class="grid-stack-item" data-gs-x="0" data-gs-y="0" data-gs-width="2" data-gs-height="1">
-            <div class="grid-stack-item-content">Widget 1</div>
-        </div>
-        <div class="grid-stack-item" data-gs-x="2" data-gs-y="0" data-gs-width="1" data-gs-height="2">
-            <div class="grid-stack-item-content">Widget 2</div>
-        </div>
-        <div class="grid-stack-item" data-gs-x="1" data-gs-y="2" data-gs-width="2" data-gs-height="1">
-            <div class="grid-stack-item-content">Widget 3</div>
-        </div>
+    <div class="buttons">
+        <button id="save-layout">Save Layout</button>
     </div>
+    <div class="grid-stack"></div>
 
     <!-- Gridstack 최신 JS -->
     <script src="https://cdn.jsdelivr.net/npm/gridstack@8.0.0/dist/gridstack-all.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Initialize the grid
-            const grid = GridStack.init();
+            const grid = GridStack.init(); // Gridstack 초기화
+            const localStorageKey = 'gridstack-layout';
+
+            // 페이지 로드 시 기존 위치 불러오기
+            const savedLayout = JSON.parse(localStorage.getItem(localStorageKey));
+            if (savedLayout) {
+                grid.load(savedLayout); // 저장된 레이아웃 로드
+            } else {
+                // 기본 레이아웃 설정
+                grid.load([
+                    {x: 0, y: 0, width: 2, height: 1, content: 'Widget 1'},
+                    {x: 2, y: 0, width: 1, height: 2, content: 'Widget 2'},
+                    {x: 1, y: 2, width: 2, height: 1, content: 'Widget 3'},
+                ]);
+            }
+
+            // 위젯 내용 추가
+            grid.engine.nodes.forEach(node => {
+                const el = node.el.querySelector('.grid-stack-item-content');
+                if (!el) {
+                    node.el.innerHTML = `<div class="grid-stack-item-content">${node.content}</div>`;
+                }
+            });
+
+            // 저장 버튼 이벤트 리스너
+            document.getElementById('save-layout').addEventListener('click', function () {
+                const layout = grid.save(false); // 현재 레이아웃 저장
+                localStorage.setItem(localStorageKey, JSON.stringify(layout)); // localStorage에 저장
+                alert('Layout saved successfully!');
+                console.log('Layout saved:', layout);
+            });
         });
     </script>
 </body>
