@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gridstack.js Sample</title>
+    <!-- Gridstack 최신 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gridstack@8.0.0/dist/gridstack.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .grid-stack-item-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #3498db;
+            color: white;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Gridstack.js Sample</h1>
+    <div class="grid-stack">
+        <!-- 기본 위젯 -->
+        <div class="grid-stack-item" data-gs-x="0" data-gs-y="0" data-gs-width="2" data-gs-height="1">
+            <div class="grid-stack-item-content">Widget 1</div>
+        </div>
+        <div class="grid-stack-item" data-gs-x="2" data-gs-y="0" data-gs-width="1" data-gs-height="2">
+            <div class="grid-stack-item-content">Widget 2</div>
+        </div>
+        <div class="grid-stack-item" data-gs-x="1" data-gs-y="2" data-gs-width="2" data-gs-height="1">
+            <div class="grid-stack-item-content">Widget 3</div>
+        </div>
+    </div>
+
+    <!-- Gridstack 최신 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/gridstack@8.0.0/dist/gridstack-all.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Initialize the grid
+            const grid = GridStack.init();
+        });
+    </script>
+</body>
+</html>

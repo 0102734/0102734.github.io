@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Muuri Grid Example</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .grid {
+      display: flex;
+      flex-wrap: wrap;
+      margin: 20px;
+    }
+    .item {
+      width: 150px;
+      height: 150px;
+      margin: 10px;
+      background: #007BFF;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      cursor: grab;
+    }
+    .item .content {
+      font-size: 20px;
+      font-weight: bold;
+    }
+    .item:active {
+      cursor: grabbing;
+    }
+  </style>
+</head>
+<body>
+  <h1 style="text-align: center;">Muuri Grid Example</h1>
+  <div class="grid">
+    <div class="item"><div class="content">1</div></div>
+    <div class="item"><div class="content">2</div></div>
+    <div class="item"><div class="content">3</div></div>
+    <div class="item"><div class="content">4</div></div>
+    <div class="item"><div class="content">5</div></div>
+    <div class="item"><div class="content">6</div></div>
+  </div>
+
+  <!-- Muuri Library -->
+  <script src="https://unpkg.com/muuri/dist/muuri.min.js"></script>
+
+  <script>
+    // Initialize Muuri Grid
+    const grid = new Muuri('.grid', {
+      dragEnabled: true,
+    });
+  </script>
+</body>
+</html>

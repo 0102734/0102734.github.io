@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Golden Layout Sample</title>
+	<meta charset="UTF-8">
+    <!-- Golden Layout CSS -->
+    <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/golden-layout/1.5.9/css/goldenlayout-base.css" />
+    <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/golden-layout/1.5.9/css/goldenlayout-dark-theme.css" />
+    
+    <!-- jQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <!-- Golden Layout -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/golden-layout/1.5.9/goldenlayout.min.js"></script>
+
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        #layout-container {
+            width: 100%;
+            height: 100%;
+        }
+        .component-content {
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div id="layout-container"></div>
+
+    <script>
+        var config = {
+            content: [{
+                type: 'row',
+                content: [{
+                    type: 'component',
+                    componentName: 'sample',
+                    componentState: { label: 'Panel 1' },
+                    title: '패널 1',
+                    width: 30
+                }, {
+                    type: 'column',
+                    content: [{
+                        type: 'component',
+                        componentName: 'sample',
+                        componentState: { label: 'Panel 2' },
+                        title: '패널 2',
+                        height: 50
+                    }, {
+                        type: 'component',
+                        componentName: 'sample',
+                        componentState: { label: 'Panel 3' },
+                        title: '패널 3',
+                        height: 50
+                    }],
+                    width: 40
+                }, {
+                    type: 'component',
+                    componentName: 'sample',
+                    componentState: { label: 'Panel 4' },
+                    title: '패널 4',
+                    width: 30
+                }]
+            }]
+        };
+
+        var myLayout = new GoldenLayout(config, '#layout-container');
+
+        myLayout.registerComponent('sample', function(container, state) {
+            container.getElement().html(`
+                <div class="component-content">
+                    <h3>${state.label}</h3>
+                    <p>이것은 ${state.label}의 내용입니다.</p>
+                    <button onclick="alert('${state.label} 버튼 클릭!')">클릭하세요</button>
+                </div>
+            `);
+        });
+
+        myLayout.init();
+
+        // 윈도우 리사이즈 대응
+        $(window).resize(function() {
+            myLayout.updateSize();
+        });
+    </script>
+</body>
+</html>
