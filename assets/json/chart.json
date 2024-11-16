@@ -1,0 +1,28 @@
+{
+  "charts": [
+    {
+      "type": "bar",
+      "data": [
+        { "category": "A", "value": 30 },
+        { "category": "B", "value": 50 }
+      ],
+      "options": {
+        "title": "Bar Chart Example",
+        "xAxisTitle": "Categories",
+        "yAxisTitle": "Values"
+      }
+    },
+    {
+      "type": "line",
+      "data": [
+        { "category": "Jan", "value": 100 },
+        { "category": "Feb", "value": 200 }
+      ],
+      "options": {
+        "title": "Line Chart Example",
+        "xAxisTitle": "Months",
+        "yAxisTitle": "Revenue"
+      }
+    }
+  ]
+}
