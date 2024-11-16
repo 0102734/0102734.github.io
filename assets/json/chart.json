@@ -3,11 +3,14 @@
     {
       "type": "bar",
       "data": [
-        { "category": "A", "value": 30 },
-        { "category": "B", "value": 50 }
+        { "category": "A", "value": 30 }
+        ,{ "category": "B", "value": 50 }
+        ,{ "category": "C", "value": 40 }
+        ,{ "category": "D", "value": 140 }
+        ,{ "category": "E", "value": 220 }
       ],
       "options": {
-        "title": "Bar Chart Example",
+        "title": "Bar Chart Example1",
         "xAxisTitle": "Categories",
         "yAxisTitle": "Values"
       }
